@@ -41,7 +41,7 @@ http://form1.corp.com {
     header / -X-Frame-Options
     header / Content-Security-Policy "frame-ancestors 'self' http://www.corp.com:8080 https://www.corp.com"
     
-    proxy / https://b2b.corp.com {
+    proxy / https://int21.de/frametest/deny.php {
         websocket
         #transparent
     }

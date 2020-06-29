@@ -1,0 +1,48 @@
+
+# no http. use https everywhere
+#*:80 {
+#redir 301 {
+#       if {>X-Forwarded-Proto} is http
+#       /  https://{host}{uri}
+#}
+#}
+
+#snippet
+(ssl) {
+    tls {%ADMINE%} {
+        #no test CA
+        #ca https://acme-staging-v02.api.letsencrypt.org/directory        
+    }
+}
+(fakessl) {
+    tls {%ADMINE%} {
+        #use test CA
+        ca https://acme-staging-v02.api.letsencrypt.org/directory
+    }
+}
+
+
+
+
+http://www.corp.com {
+    #import {%CA%}
+
+    log / stdout "{proto} Request: {method} {path}"
+    root /public/
+}
+
+
+#b2b.corp.com/helpdesk/support-1/submit?iframe=1
+http://form1.corp.com {
+    #import {%CA%}
+    
+    log / stdout "{proto} Request: {method} {path}"
+
+    header / -X-Frame-Options
+    header / Content-Security-Policy "frame-ancestors 'self' http://www.corp.com:8080 https://www.corp.com"
+    
+    proxy / https://b2b.corp.com {
+        websocket
+        #transparent
+    }
+}

@@ -1,0 +1,34 @@
+version: "2.4"
+
+services:
+
+  # caddy:
+  #   image: "abiosoft/caddy:no-stats"
+  #   volumes:
+  ##     - ./caddy/conf/:/root/.caddy         # to save certificates on disk
+  #     - ./caddy/Caddyfile:/etc/Caddyfile    # to mount custom Caddyfile
+  #     - ./www/:/public/
+  #   extra_hosts:
+  #     - "www.corp.com:127.0.0.1"      
+  #     - "form1.corp.com:127.0.0.1"      
+  #   ports:
+  #     - "8080:80"
+  #   environment: 
+  #     - ACME_AGREE=true
+  #     - ADMINE=x@y.z
+
+  
+
+  apache:
+    image: "httpd:latest"
+    volumes:
+      - ./apache/apache.conf/:/usr/local/apache2/conf/httpd.conf
+      - ./apache/sites:/sites/
+      - ./www/:/usr/local/apache2/htdocs/www
+    extra_hosts:
+      - "www.corp.com:127.0.0.1"      
+      - "form1.corp.com:127.0.0.1"      
+    ports:
+      - "8080:80"
+
+  
